@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Base class representing a character
+class Character {
+protected:
+    int health;
+    string name;
+
+public:
+    Character(const string& name, int health) : name(name), health(health) {}
+
+    void takeDamage(int damage) {
+        health -= damage;
+        cout << name << " took " << damage << " damage. Remaining health: " << health << endl;
+    }
+
+    virtual void attack(Character& target) {
+        cout << name << " attacks " << target.getName() << "!" << endl;
+        target.takeDamage(10);
+    }
+
+    const string& getName() const {
+        return name;
+    }
+
+    int getHealth() const {
+        return health;
+    }
+};
+
+// Derived class representing the player character
+class Player : public Character {
+public:
+    Player(const string& name, int health) : Character(name, health) {}
+
+    void specialAttack(Character& target) {
+        cout << name << " uses special attack on " << target.getName() << "!" << endl;
+        target.takeDamage(20);
+    }
+};
+
+// Derived class representing an enemy character
+class Enemy : public Character {
+public:
+    Enemy(const string& name, int health) : Character(name, health) {}
+};
+
+int main() {
+    Player player("Hero", 100);
+    Enemy enemy("Dragon", 150);
+
+    cout << "Battle begins!" << endl;
+
+    // Player attacks enemy
+    player.attack(enemy);
+
+    // Enemy attacks player
+    enemy.attack(player);
+
+    // Player uses special attack on enemy
+    player.specialAttack(enemy);
+
+    // Display final health
+    cout << "Final health:" << endl;
+    cout << player.getName() << ": " << player.getHealth() << endl;
+    cout << enemy.getName() << ": " << enemy.getHealth() << endl;
+
+    return 0;
+}
